@@ -1,0 +1,2 @@
+A proof of concept that shows why doing file system IO without locking is bad.
+Every time you `./run.bsh` you will get a different result.
