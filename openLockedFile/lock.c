@@ -1,17 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
-
-const int SLEEP_SEC = 10;
+#include <unistd.h>
 
 typedef struct {
   int l_type, l_whence, l_start, l_len;
 } flock;
 
-int main(void) {
+int main(int argc, char **argv) {
+
+  int sleepTime;
+  char *fileName;
+
+  int fd;
+
+  // Some quick arg handling
+  if(argc != 3) {
+    perror("Unexpected number of args: `./lock <file name> <sleep seconds>`.");
+    return EXIT_FAILURE;
+  }
+
+  fileName = argv[1];
+  sleepTime = atoi(argv[2]);
 
   // Open the file
-  int fd = open("bwah", O_RDWR);
+  fd = open(fileName, O_RDWR);
 
   if(fd < 0) {
     perror("Couldn't open the file");
@@ -27,8 +40,8 @@ int main(void) {
   }
 
   // Sleep for X seconds (long enough for node to finish)
-  printf("Got lock! Going to sleep for %i seconds.\n", SLEEP_SEC);
-  sleep(SLEEP_SEC);
+  printf("Got lock! Going to sleep for %i seconds.\n", sleepTime);
+  sleep(sleepTime);
 
   // Close the file
   close(fd);
