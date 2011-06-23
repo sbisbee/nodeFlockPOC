@@ -1,0 +1,18 @@
+#!/bin/bash
+
+FILE="bwah"
+
+# Create an empty file, overwriting it if it already exists.
+echo '' > $FILE
+
+# Obtain an exclusive lock on the file for X seconds, backgrounding it so we
+# can do our own operations.
+./lock &
+
+# Now that node is done trying to write to the file, assert that the file is
+# still empty. 
+if [ "`cat $FILE 2>/dev/null`" == '' ]; then
+  echo 'Success'
+else
+  echo 'FAILURE'
+fi
